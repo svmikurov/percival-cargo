@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Description &#8212; Percival-cargo  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=27fed22d" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Glossary" href="glossary.html" />
+    <link rel="prev" title="Domain" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="description">
+<h1>Description<a class="headerlink" href="#description" title="Link to this heading">¶</a></h1>
+<section id="specification">
+<h2>Specification<a class="headerlink" href="#specification" title="Link to this heading">¶</a></h2>
+<p><em>Товар</em> идентифицируется по <em>артикулу</em>, или <em>единице складского учета</em> (<a class="reference internal" href="glossary.html#term-stock-keeping-unit"><span class="xref std std-term">stock-keeping unit</span></a>, SKU).</p>
+<section id="order">
+<h3>Order<a class="headerlink" href="#order" title="Link to this heading">¶</a></h3>
+<p><em>Клиенты</em> (<a class="reference internal" href="glossary.html#term-customer"><span class="xref std std-term">customer</span></a>) делают <em>заказы</em> (<a class="reference internal" href="glossary.html#term-order"><span class="xref std std-term">order</span></a>).</p>
+<p>Заказ идентифицируется <em>ссылкой на заказ</em> (<a class="reference internal" href="glossary.html#term-order-reference"><span class="xref std std-term">order reference</span></a>)
+и состоит из нескольких <em>товарных позиций</em>, или <em>строк</em> (<a class="reference internal" href="glossary.html#term-order-line"><span class="xref std std-term">order line</span></a>),
+где каждая товарная позиция имеет <em>артикул</em> и <em>количество</em> (<a class="reference internal" href="glossary.html#term-quantity"><span class="xref std std-term">quantity</span></a>).</p>
+<dl class="simple">
+<dt>Например:</dt><dd><ul class="simple">
+<li><p>10 шт. <em>артикула</em> СТУЛ-КРАСНЫЙ;</p></li>
+<li><p>1 шт. <em>артикула</em> ЛАМПА-БЕЗВКУСНАЯ.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="batch">
+<h3>Batch<a class="headerlink" href="#batch" title="Link to this heading">¶</a></h3>
+<p>Отдел закупок заказывает малые <em>партии</em> (<a class="reference internal" href="glossary.html#term-batch"><span class="xref std std-term">batch</span></a>) <em>товара</em>.</p>
+<p><em>Партия</em> товара имеет уникальный идентификатор,
+именуемый <em>ссылкой</em>, <em>артикулом</em> и <em>количеством</em>.</p>
+</section>
+</section>
+<section id="action">
+<h2>Action<a class="headerlink" href="#action" title="Link to this heading">¶</a></h2>
+<p>После оформления <em>заказа</em>, мы отправляем <em>товар</em> из этой конкретной <em>партии</em>
+на клиентский адрес доставки.</p>
+<p>Когда мы размещаем <code class="docutils literal notranslate"><span class="pre">x</span></code> штук в <em>партии</em> товара, то его <em>располагаемое количество</em>
+(<a class="reference internal" href="glossary.html#term-available-quantity"><span class="xref std std-term">available quantity</span></a>) уменьшается на <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
+<dl class="simple">
+<dt>Например:</dt><dd><ul class="simple">
+<li><p>нас есть <em>партия</em> из 20 шт. <em>артикула</em> СТОЛ-МАЛЫЙ,
+и мы размещаем в ней <em>товарную позицию</em> на 2 шт. <em>артикула</em> СТОЛ-МАЛЫЙ;</p></li>
+<li><p>в <em>партии</em> товара должно остаться 18 шт. <em>артикула</em> СТОЛ-МАЛЫЙ.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Мы не можем размещать <em>товарные позиции заказа</em>, если <em>располагаемое количество</em>
+меньше количества в <em>товарной позиции</em>.</p>
+<dl class="simple">
+<dt>Например:</dt><dd><ul class="simple">
+<li><p>у нас есть <em>партия</em> из 1 шт. <em>артикула</em> ПОДУШКА-СИНЯЯ
+и <em>товарная позиция</em> на 2 шт. <em>артикула</em> ПОДУШКА-СИНЯЯ;</p></li>
+<li><p>мы не можем разместить эту <em>позицию</em> в <em>партии</em> товара.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Мы не можем размещать одну и ту же <em>товарную позицию</em> заказа дважды.</p>
+<dl class="simple">
+<dt>Например:</dt><dd><ul class="simple">
+<li><p>у нас есть <em>партия</em> из 10 шт. <em>артикула</em> ВАЗА-СИНЯЯ,
+и мы размещаем <em>товарную позицию</em> на 2 шт. <em>артикула</em> ВАЗА-СИНЯЯ;</p></li>
+<li><p>если снова разместить эту <em>позицию</em> в той же <em>партии товара</em>,
+то указанная <em>партия</em> все равно должна иметь количество 8 шт.</p></li>
+</ul>
+</dd>
+</dl>
+<p><em>Партии товара</em> имеют <em>предполагаемый срок прибытия</em> (<a class="reference internal" href="glossary.html#term-estimated-arrival-time"><span class="xref std std-term">estimated arrival time</span></a>, ETA),
+если они в настоящее время в пути, либо они могут быть на складе (<a class="reference internal" href="glossary.html#term-warehouse-stock"><span class="xref std std-term">warehouse stock</span></a>).</p>
+<p><em>Складские партии</em> имеют приоритет в размещении.
+Приоритет <em>партий в пути</em> зависит от их <em>предполагаемого срока прибытия</em>
+— чем раньше срок, тем более партия приоритетна к размещению.</p>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Percival-cargo</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Domain</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="glossary.html">Glossary</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Domain</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Domain</a></li>
+      <li>Next: <a href="glossary.html" title="next chapter">Glossary</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2026, Sergei Mikurov.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../_sources/domain/description.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
