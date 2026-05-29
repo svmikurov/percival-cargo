@@ -62,11 +62,14 @@
   // Item enumeraion //
   // Code spell
   "cSpell.words": [
-    "virtualenvs",
-    "mypy",
-    "venv",
-    "pytest",
-    "pycache",
+    // Project settings
     "Mikurov",
+    "venv",
+    "virtualenvs",
+    "pycache",
+    "mypy",
+    "pytest",
+    // Sphinx directives
+    "toctree",
   ]
 }
