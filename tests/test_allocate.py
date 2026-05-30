@@ -74,7 +74,7 @@ def test_the_different_line_and_batch() -> None:
     batch_qty = 20
     line_qty = 2
 
-    batch = Batch('batch-001', 'TABLE-BIG', batch_qty)
+    batch = Batch('batch-001', 'TABLE-BIG', batch_qty, eta=None)
     line = OrderLine('order-001', 'TABLE-SMALL', line_qty)
 
     # Act
