@@ -30,7 +30,7 @@ ignore = [
 ]
 
 [lint.per-file-ignores]
-"tests/*" = ["D102", "D103"]
+"tests/*" = ["D101", "D102", "D103"]
 "interface*" = ["D101", "D102", "D103"]
 
 [lint.flake8-quotes]
