@@ -4,17 +4,7 @@ import pytest
 
 from percival_cargo.domain.model import Batch, OrderLine
 
-
-def create_objects(
-    squ: str,
-    batch_qty: int,
-    line_qty: int,
-) -> tuple[Batch, OrderLine]:
-    """Create the product order line and batch."""
-    return (
-        Batch('batch-001', squ, batch_qty),
-        OrderLine('order-001', squ, line_qty),
-    )
+from .tools import make_batch_and_line
 
 
 @pytest.mark.parametrize(
@@ -33,7 +23,7 @@ def test_allocation(
 ) -> None:
     """Test the product order line allocation to batch."""
     # Arrange
-    batch, line = create_objects(squ, batch_qty, line_qty)
+    batch, line = make_batch_and_line(squ, batch_qty, line_qty)
 
     # Act
     batch.allocate(line)
@@ -49,7 +39,7 @@ def test_the_duplicate_allocation() -> None:
     line_qty = 2
     expected_qty = batch_qty - line_qty
 
-    batch, line = create_objects('TABLE-SMALL', batch_qty, line_qty)
+    batch, line = make_batch_and_line('TABLE-SMALL', batch_qty, line_qty)
 
     # Act
     batch.allocate(line)
@@ -67,7 +57,7 @@ def test_the_different_allocation() -> None:
     other_line_qty = 2
     expected_qty = batch_qty - line_qty - other_line_qty
 
-    batch, line = create_objects('TABLE-SMALL', batch_qty, line_qty)
+    batch, line = make_batch_and_line('TABLE-SMALL', batch_qty, line_qty)
     other_line = OrderLine('order-002', 'TABLE-SMALL', other_line_qty)
 
     # Act
