@@ -2,6 +2,9 @@
 
 from dataclasses import dataclass
 
+from .exceptions import OutOfBatch
+from .interfaces import OrderLineProtocol
+
 
 @dataclass(frozen=True)
 class OrderLine:
@@ -47,14 +50,21 @@ class Batch:
         self.ref = ref
         self.sku = sku
         self.qty = qty
-        self.lines: set[OrderLine] = set()
+        self.lines: set[OrderLineProtocol] = set()
 
-    def allocate(self, line: OrderLine) -> None:
+    def allocate(self, line: OrderLineProtocol) -> None:
         """Allocate order line in batch."""
         if self.can_allocate(line):
             self.lines.add(line)
 
-    def can_allocate(self, line: OrderLine) -> bool:
+    def deallocate(self, line: OrderLineProtocol) -> None:
+        """Deallocate the order line from batch."""
+        try:
+            self.lines.remove(line)
+        except KeyError as err:
+            raise OutOfBatch from err
+
+    def can_allocate(self, line: OrderLineProtocol) -> bool:
         """Check that product can be allocated."""
         return self.sku == line.sku and self.available_quantity >= line.qty
 
