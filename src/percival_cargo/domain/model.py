@@ -10,7 +10,7 @@ from .exceptions import OutOfBatch, OutOfStock
 if TYPE_CHECKING:
     from datetime import date
 
-    from .interfaces import OrderLineProtocol
+    from .interfaces.model import BatchProtocol, OrderLineProtocol
 
 
 @dataclass(frozen=True)
@@ -105,10 +105,10 @@ class Batch:
         return self.eta > other.eta
 
 
-def allocate(line: OrderLine, batches: list[Batch]) -> str:
+def allocate(line: OrderLineProtocol, batches: list[BatchProtocol]) -> str:
     """Allocate the order line to faster batch."""
     try:
-        batch = next(b for b in sorted(batches) if b.can_allocate(line))
+        batch = next(b for b in sorted(batches) if b.can_allocate(line))  # type: ignore
     except StopIteration as err:
         raise OutOfStock(f'The item {line.sku} is out of stock') from err
     batch.allocate(line)

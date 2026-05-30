@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 from percival_cargo.domain.model import Batch, OrderLine
 
 if TYPE_CHECKING:
-    from percival_cargo.domain.interfaces import (
+    from percival_cargo.domain.interfaces.model import (
         BatchProtocol,
         OrderLineProtocol,
     )
