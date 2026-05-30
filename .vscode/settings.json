@@ -69,6 +69,13 @@
     "pycache",
     "mypy",
     "pytest",
+    // Documentation
+    "Messagebus",
+    // Project variables
+    "orderline",
+    // Library dependencies
+    "sqlachemy",
+    "autouse",
     // Sphinx directives
     "toctree",
   ]
