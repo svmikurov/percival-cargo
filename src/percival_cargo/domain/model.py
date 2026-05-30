@@ -57,29 +57,34 @@ class Batch:
         eta: date | None,
     ) -> None:
         """Construct the model."""
-        self.ref = ref
+        self.reference = ref
         self.sku = sku
-        self.qty = qty
         self.eta = eta
-        self.lines: set[OrderLineProtocol] = set()
+        self._purchased_quantity = qty
+        self._allocations: set[OrderLineProtocol] = set()
 
     def allocate(self, line: OrderLineProtocol) -> None:
         """Allocate order line in batch."""
         if self.can_allocate(line):
-            self.lines.add(line)
+            self._allocations.add(line)
 
     def deallocate(self, line: OrderLineProtocol) -> None:
         """Deallocate the order line from batch."""
         try:
-            self.lines.remove(line)
+            self._allocations.remove(line)
         except KeyError as err:
             raise OutOfBatch from err
 
-    def can_allocate(self, line: OrderLineProtocol) -> bool:
-        """Check that product can be allocated."""
-        return self.sku == line.sku and self.available_quantity >= line.qty
+    @property
+    def allocated_quantity(self) -> int:
+        """Get allocated product quantity."""
+        return sum(line.qty for line in self._allocations)
 
     @property
     def available_quantity(self) -> int:
         """Get available product quantity."""
-        return self.qty - sum(line.qty for line in self.lines)
+        return self._purchased_quantity - self.allocated_quantity
+
+    def can_allocate(self, line: OrderLineProtocol) -> bool:
+        """Check that product can be allocated."""
+        return self.sku == line.sku and self.available_quantity >= line.qty
