@@ -2,6 +2,7 @@ Domain
 ======
 
 .. toctree::
+   :maxdepth: 2
 
-   glossary
    description
+   glossary
