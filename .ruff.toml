@@ -21,6 +21,7 @@ select = [
     "Q",    # flake8-quotes: https://pypi.org/project/flake8-quotes/
 ]
 ignore = [
+    "D105",     # Missing docstring in magic method
     "D203",     # 1 blank line required before class docstring
     "D211",     # No blank lines allowed before class docstring
     "D213",     # Multi-line docstring summary should start at the second line
