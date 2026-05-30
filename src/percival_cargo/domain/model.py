@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from .exceptions import OutOfBatch
+from .exceptions import OutOfBatch, OutOfStock
 
 if TYPE_CHECKING:
     from datetime import date
@@ -96,3 +96,20 @@ class Batch:
 
     def __hash__(self) -> int:
         return hash(self.reference)
+
+    def __gt__(self, other: Batch) -> bool:
+        if self.eta is None:
+            return False
+        if other.eta is None:
+            return True
+        return self.eta > other.eta
+
+
+def allocate(line: OrderLine, batches: list[Batch]) -> str:
+    """Allocate the order line to faster batch."""
+    try:
+        batch = next(b for b in sorted(batches) if b.can_allocate(line))
+    except StopIteration as err:
+        raise OutOfStock(f'The item {line.sku} is out of stock') from err
+    batch.allocate(line)
+    return batch.reference
