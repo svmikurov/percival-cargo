@@ -1,4 +1,4 @@
-# Type checking
+# Check types (mypy)
 type-check:
 	poetry run mypy .
 
@@ -6,49 +6,53 @@ type-check:
 test:
 	poetry run pytest
 
-# Lint code (check only)
+# Lint code (read-only, no fixes)
 lint:
 	poetry run ruff check
 
-# Fix lint issues (auto)
+# Auto-fix lint issues
 fix:
 	poetry run ruff check --fix
 
-# Full check (type + lint + test)
-check: format fix type-check lint test
+# CI pipeline (read-only checks, no changes)
+ci: lint type-check test
+
+# Full pre-commit check (format + fix + type-check + test)
+check: format fix type-check test
 
 # Format code
 format:
 	poetry run ruff format
 
-# Setup project
+# Install dependencies
 setup:
 	poetry install
 
-# Clean cache
+# Remove cache files
 clean:
 	find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
 	find . -type d -name ".pytest_cache" -exec rm -rf {} + 2>/dev/null || true
 	find . -type d -name ".mypy_cache" -exec rm -rf {} + 2>/dev/null || true
 
-# Build documentation
+# Build documentation (HTML)
 docs-build:
 	poetry run make -C docs html
 
-# Open documentation with default browser 
+# Build docs and open in default browser
 docs-open: docs-build
 	xdg-open docs/build/html/index.html
 
-# Show all commands
+# Show available commands
 help:
 	@echo "Available commands:"
-	@echo "  make setup      		- Install dependencies"
-	@echo "  make test       		- Run tests"
-	@echo "  make lint       		- Check code style"
-	@echo "  make fix        		- Auto-fix lint issues"
-	@echo "  make type-check 		- Check types (mypy)"
-	@echo "  make check      		- Full check with linter format and fix"
-	@echo "  make format     		- Format code"
-	@echo "  make clean      		- Remove cache files"
-	@echo "  make docs-build  		- Remove cache files"
-	@echo "  make docs-open			- Build documentation and open via browser"
+	@echo "  make setup        - Install dependencies"
+	@echo "  make test         - Run tests"
+	@echo "  make lint         - Check code style (read-only)"
+	@echo "  make fix          - Auto-fix lint issues"
+	@echo "  make type-check   - Check types with mypy"
+	@echo "  make format       - Format code with ruff"
+	@echo "  make check        - Full check (format + fix + type-check + test)"
+	@echo "  make ci           - CI check (read-only: lint + type-check + test)"
+	@echo "  make clean        - Remove cache files"
+	@echo "  make docs-build   - Build HTML documentation"
+	@echo "  make docs-open    - Build docs and open in browser"
