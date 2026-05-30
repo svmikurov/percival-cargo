@@ -2,3 +2,5 @@
 .pytest_cache
 __pycache__
 build/
+*.drawio.bkp*
+*.drawio.dtmp*
