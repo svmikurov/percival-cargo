@@ -14,6 +14,11 @@ class HasOrderID(Protocol):
     def order_id(self) -> str: ...
 
 
+class HasReference(Protocol):
+    @property
+    def reference(self) -> str: ...
+
+
 class HasSKU(Protocol):
     @property
     def sku(self) -> str: ...
@@ -56,6 +61,8 @@ class OrderLineProtocol(
 
 
 class BatchProtocol(
+    HasReference,
+    HasSKU,
     Allocatable,
     CanAllocate,
     DeAllocatable,
