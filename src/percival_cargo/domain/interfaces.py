@@ -56,6 +56,7 @@ class OrderLineProtocol(
 
 
 class BatchProtocol(
+    Allocatable,
     CanAllocate,
     DeAllocatable,
     HasAvailableQuantity,
