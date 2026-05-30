@@ -25,7 +25,12 @@ ignore = [
     "D211",     # No blank lines allowed before class docstring
     "D213",     # Multi-line docstring summary should start at the second line
     "D416",     # Section name should end with a colon
+    "N818",     # Exception name should be named with an Error suffix
 ]
+
+[lint.per-file-ignores]
+"tests/*" = ["D102", "D103"]
+"interface*" = ["D101", "D102", "D103"]
 
 [lint.flake8-quotes]
 inline-quotes = "single"
