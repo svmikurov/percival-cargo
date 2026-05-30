@@ -1,0 +1,7 @@
+Domain
+======
+
+.. toctree::
+
+   glossary
+   description
