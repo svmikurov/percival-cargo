@@ -14,6 +14,11 @@ class HasOrderID(Protocol):
     def order_id(self) -> str: ...
 
 
+class HasReference(Protocol):
+    @property
+    def reference(self) -> str: ...
+
+
 class HasSKU(Protocol):
     @property
     def sku(self) -> str: ...
@@ -30,7 +35,7 @@ class HasAvailableQuantity(Protocol):
 
 
 class Allocatable(Protocol):
-    def allocate(self, line: OrderLineProtocol) -> None: ...
+    def allocate(self, line: OrderLineProtocol) -> str | None: ...
 
 
 class DeAllocatable(Protocol):
@@ -56,10 +61,19 @@ class OrderLineProtocol(
 
 
 class BatchProtocol(
+    HasReference,
+    HasSKU,
     Allocatable,
     CanAllocate,
     DeAllocatable,
     HasAvailableQuantity,
     Protocol,
 ):
-    """Protocol for product batch interface."""
+    """Protocol for batch interface."""
+
+
+class ProductProtocol(
+    Allocatable,
+    Protocol,
+):
+    """Protocol for product interface."""
