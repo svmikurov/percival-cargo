@@ -1,9 +1,16 @@
 """Domain model."""
 
+from __future__ import annotations
+
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
 from .exceptions import OutOfBatch
-from .interfaces import OrderLineProtocol
+
+if TYPE_CHECKING:
+    from datetime import date
+
+    from .interfaces import OrderLineProtocol
 
 
 @dataclass(frozen=True)
@@ -37,6 +44,8 @@ class Batch:
         Stock-keeping unit of product.
     qty : `int`
         Product quantity.
+    eta : date | None
+        Estimated arrival time
 
     """
 
@@ -45,11 +54,13 @@ class Batch:
         ref: str,
         sku: str,
         qty: int,
+        eta: date | None,
     ) -> None:
         """Construct the model."""
         self.ref = ref
         self.sku = sku
         self.qty = qty
+        self.eta = eta
         self.lines: set[OrderLineProtocol] = set()
 
     def allocate(self, line: OrderLineProtocol) -> None:
