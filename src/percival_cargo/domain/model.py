@@ -10,7 +10,7 @@ from .exceptions import OutOfBatch, OutOfStock
 if TYPE_CHECKING:
     from datetime import date
 
-    from .interfaces import OrderLineProtocol
+    from .interfaces.model import OrderLineProtocol
 
 
 @dataclass(frozen=True)
