@@ -58,7 +58,7 @@ def test_the_different_allocation() -> None:
     expected_qty = batch_qty - line_qty - other_line_qty
 
     batch, line = make_batch_and_line('TABLE-SMALL', batch_qty, line_qty)
-    other_line = OrderLine('order-002', 'TABLE-SMALL', other_line_qty)
+    other_line = OrderLine('order-002', 'TABLE-SMALL', line_qty)
 
     # Act
     batch.allocate(line)
