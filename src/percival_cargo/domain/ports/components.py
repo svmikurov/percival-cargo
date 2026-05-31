@@ -27,7 +27,7 @@ class HasOrderID(Protocol):
 
 class HasReference(Protocol):
     @property
-    def reference(self) -> str: ...
+    def ref(self) -> str: ...
 
 
 class HasSKU(Protocol):

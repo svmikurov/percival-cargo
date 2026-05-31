@@ -62,7 +62,7 @@ class Batch:
         eta: date | None,
     ) -> None:
         """Construct the model."""
-        self.reference = ref
+        self.ref = ref
         self.sku = sku
         self.eta = eta
         self._purchased_quantity = qty
@@ -97,10 +97,10 @@ class Batch:
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Batch):
             return False
-        return self.reference == other.reference
+        return self.ref == other.ref
 
     def __hash__(self) -> int:
-        return hash(self.reference)
+        return hash(self.ref)
 
     def __gt__(self, other: BatchProtocol) -> bool:
         if self.eta is None:
@@ -137,7 +137,7 @@ class Product:
 
         batch.allocate(line)
         self._version_number += 1
-        return batch.reference
+        return batch.ref
 
     @property
     def events(self) -> list[EventProtocol]:
@@ -159,4 +159,4 @@ def allocate(line: OrderLineProtocol, batches: list[BatchProtocol]) -> str:
             f'The item {line.sku} is out of stock'
         ) from err
     batch.allocate(line)
-    return batch.reference
+    return batch.ref
