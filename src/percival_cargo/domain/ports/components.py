@@ -8,7 +8,11 @@ if TYPE_CHECKING:
     from datetime import date
 
 Event = TypeVar('Event')
+
 OrderLine_contra = TypeVar('OrderLine_contra', contravariant=True)
+Batch = TypeVar('Batch')
+
+Repository_cov = TypeVar('Repository_cov', covariant=True)
 
 
 ###################################################
@@ -51,6 +55,16 @@ class HasEvents(Protocol[Event]):
     def events(self) -> list[Event]: ...
 
 
+class HasBatches(Protocol[Batch]):
+    @property
+    def batches(self) -> list[Batch]: ...
+
+
+class HasProducts(Protocol[Repository_cov]):
+    @property
+    def products(self) -> Repository_cov: ...
+
+
 ###################################################
 # Methods
 ###################################################
@@ -66,3 +80,15 @@ class DeAllocatable(Protocol[OrderLine_contra]):
 
 class CanAllocate(Protocol[OrderLine_contra]):
     def can_allocate(self, line: OrderLine_contra) -> bool: ...
+
+
+class CanCommit(Protocol):
+    def commit(self) -> None: ...
+
+
+class CanCollectNewEvents(Protocol):
+    def collect_new_events(self) -> None: ...
+
+
+class CanRollback(Protocol):
+    def rollback(self) -> None: ...
