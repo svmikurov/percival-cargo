@@ -4,7 +4,7 @@ import pytest
 
 from percival_cargo.application import exceptions, services
 from percival_cargo.domain import model
-from percival_cargo.domain.interfaces.repository import BatchRepositoryProtocol
+from percival_cargo.domain.ports.repository import BatchRepositoryProtocol
 from percival_cargo.infrastructure.repositories.impl_fake import FakeRepository
 
 

@@ -11,7 +11,7 @@ from .abstract import AbstractBatchRepository
 if TYPE_CHECKING:
     from sqlalchemy.orm.session import Session
 
-    from percival_cargo.domain.interfaces.model import BatchProtocol
+    from percival_cargo.domain.ports.model import BatchProtocol
 
 
 class SqlAlchemyBatchRepository(AbstractBatchRepository):

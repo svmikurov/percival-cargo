@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, override
 from .abstract import AbstractBatchRepository
 
 if TYPE_CHECKING:
-    from percival_cargo.domain.interfaces.model import BatchProtocol
+    from percival_cargo.domain.ports.model import BatchProtocol
 
 
 class FakeRepository(AbstractBatchRepository):

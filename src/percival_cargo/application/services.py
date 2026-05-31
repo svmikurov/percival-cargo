@@ -1,11 +1,11 @@
 """Application services."""
 
 from percival_cargo.domain import model
-from percival_cargo.domain.interfaces.model import (
+from percival_cargo.domain.ports.model import (
     BatchProtocol,
     OrderLineProtocol,
 )
-from percival_cargo.domain.interfaces.repository import BatchRepositoryProtocol
+from percival_cargo.domain.ports.repository import BatchRepositoryProtocol
 
 from .exceptions import InvalidSku
 

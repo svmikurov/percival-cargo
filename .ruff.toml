@@ -31,7 +31,8 @@ ignore = [
 
 [lint.per-file-ignores]
 "tests/*" = ["D101", "D102", "D103"]
-"*/interfaces/*" = ["D101", "D102", "D103"]
+"*/ports/*" = ["D101", "D102", "D103"]
+"*/protocols/*" = ["D101", "D102", "D103"]
 
 [lint.flake8-quotes]
 inline-quotes = "single"

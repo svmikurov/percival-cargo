@@ -11,7 +11,7 @@ from percival_cargo.domain import events
 from percival_cargo.domain.model import Batch, OrderLine, Product
 
 if TYPE_CHECKING:
-    from percival_cargo.domain.interfaces.model import (
+    from percival_cargo.domain.ports.model import (
         BatchProtocol,
         OrderLineProtocol,
         ProductProtocol,
