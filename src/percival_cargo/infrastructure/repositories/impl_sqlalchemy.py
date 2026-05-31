@@ -9,7 +9,7 @@ from .abstract import AbstractBatchRepository
 if TYPE_CHECKING:
     from sqlalchemy.orm.session import Session
 
-    from percival_cargo.ports.model import ProductProtocol
+    from percival_cargo import ports
 
 
 class SqlAlchemyBatchRepository(AbstractBatchRepository):
@@ -20,16 +20,16 @@ class SqlAlchemyBatchRepository(AbstractBatchRepository):
         self._session = session
 
     @override
-    def add(self, product: ProductProtocol) -> None:
+    def add(self, product: ports.ProductProtocol) -> None:
         """Add batch."""
         raise NotImplementedError
 
     @override
-    def get(self, sku: str) -> ProductProtocol:
+    def get(self, sku: str) -> ports.ProductProtocol:
         """Get batch."""
         raise NotImplementedError
 
     @override
-    def list(self) -> list[ProductProtocol]:
+    def list(self) -> list[ports.ProductProtocol]:
         """Get batches."""
         raise NotImplementedError

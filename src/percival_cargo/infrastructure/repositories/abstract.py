@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, override
 from percival_cargo.ports.repository import RepositoryProtocol
 
 if TYPE_CHECKING:
-    from percival_cargo.ports.model import ProductProtocol
+    from percival_cargo import ports
 
 
 class AbstractBatchRepository(ABC, RepositoryProtocol):
@@ -16,15 +16,15 @@ class AbstractBatchRepository(ABC, RepositoryProtocol):
 
     @override
     @abstractmethod
-    def add(self, product: ProductProtocol) -> None:
+    def add(self, product: ports.ProductProtocol) -> None:
         """Add batch."""
 
     @override
     @abstractmethod
-    def get(self, sku: str) -> ProductProtocol:
+    def get(self, sku: str) -> ports.ProductProtocol:
         """Get batch."""
 
     @override
     @abstractmethod
-    def list(self) -> list[ProductProtocol]:
+    def list(self) -> list[ports.ProductProtocol]:
         """Get batches."""

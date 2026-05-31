@@ -4,18 +4,17 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from percival_cargo.domain import exceptions as domain_exceptions
 from percival_cargo.domain import model
-from percival_cargo.domain.exceptions import InvalidSkuException
 from percival_cargo.infrastructure import email
-from percival_cargo.ports import events
 
 if TYPE_CHECKING:
-    from percival_cargo.ports import uow
+    from percival_cargo import ports
 
 
 def add_batch(
-    event: events.BatchCreatedProtocol,
-    uow: uow.UnitOfWorkProtocol,
+    event: ports.BatchCreatedProtocol,
+    uow: ports.UnitOfWorkProtocol,
 ) -> None:
     """Add batch."""
     with uow:
@@ -32,8 +31,8 @@ def add_batch(
 
 
 def allocate(
-    event: events.AllocationRequiredProtocol,
-    uow: uow.UnitOfWorkProtocol,
+    event: ports.AllocationRequiredProtocol,
+    uow: ports.UnitOfWorkProtocol,
 ) -> str | None:
     """Allocate."""
     line = model.OrderLine(event.order_id, event.sku, event.qty)
@@ -41,7 +40,9 @@ def allocate(
     with uow:
         product = uow.products.get(sku=line.sku)
         if product is None:
-            raise InvalidSkuException(f'Invalid sku {line.sku}')
+            raise domain_exceptions.InvalidSkuException(
+                f'Invalid sku {line.sku}'
+            )
 
         batch_ref = product.allocate(line)
         uow.commit()
@@ -49,8 +50,8 @@ def allocate(
 
 
 def send_out_of_stock_notification(
-    event: events.OutOfStock,
-    uow: uow.UnitOfWorkProtocol,
+    event: ports.OutOfStock,
+    uow: ports.UnitOfWorkProtocol,
 ) -> None:
     """Send out of stock notification."""
     email.send(

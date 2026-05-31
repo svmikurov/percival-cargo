@@ -2,11 +2,7 @@
 
 from typing import Protocol
 
-from . import components
-
-
-class EventProtocol(Protocol):
-    """Protocol for event interface."""
+from . import components, events
 
 
 class OrderLineProtocol(
@@ -35,7 +31,7 @@ class BatchProtocol(
 
 
 class ProductProtocol(
-    components.HasEvents[EventProtocol],
+    components.HasEvents[events.EventProtocol],
     components.HasBatches[BatchProtocol],
     components.OptionAllocatable[OrderLineProtocol],
     Protocol,

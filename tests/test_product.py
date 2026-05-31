@@ -11,11 +11,7 @@ from percival_cargo.domain import events
 from percival_cargo.domain.model import Batch, OrderLine, Product
 
 if TYPE_CHECKING:
-    from percival_cargo.ports.model import (
-        BatchProtocol,
-        OrderLineProtocol,
-        ProductProtocol,
-    )
+    from percival_cargo import ports
 
 
 @pytest.fixture
@@ -24,29 +20,29 @@ def today() -> date:
 
 
 @pytest.fixture
-def batch(today: date) -> BatchProtocol:
+def batch(today: date) -> ports.BatchProtocol:
     return Batch(ref='reference-01', sku='TABLE', qty=10, eta=today)
 
 
 @pytest.fixture
-def line() -> OrderLineProtocol:
+def line() -> ports.OrderLineProtocol:
     return OrderLine(order_id='order-01', sku='TABLE', qty=10)
 
 
 @pytest.fixture
-def other_line() -> OrderLineProtocol:
+def other_line() -> ports.OrderLineProtocol:
     return OrderLine(order_id='order-02', sku='TABLE', qty=10)
 
 
 @pytest.fixture
-def product(batch: BatchProtocol) -> ProductProtocol:
+def product(batch: ports.BatchProtocol) -> ports.ProductProtocol:
     return Product(sku='TABLE', batches=[batch])
 
 
 def test_records_out_of_stock_event_if_cannot_allocate(
-    product: ProductProtocol,
-    line: OrderLineProtocol,
-    other_line: OrderLineProtocol,
+    product: ports.ProductProtocol,
+    line: ports.OrderLineProtocol,
+    other_line: ports.OrderLineProtocol,
 ) -> None:
     # Arrange
     product.allocate(line)

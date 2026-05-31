@@ -11,11 +11,7 @@ from .exceptions import OutOfBatchException, OutOfStockException
 if TYPE_CHECKING:
     from datetime import date
 
-    from percival_cargo.ports.model import (
-        BatchProtocol,
-        EventProtocol,
-        OrderLineProtocol,
-    )
+    from percival_cargo import ports
 
 
 @dataclass(frozen=True)
@@ -66,14 +62,14 @@ class Batch:
         self.sku = sku
         self.eta = eta
         self._purchased_quantity = qty
-        self._allocations: set[OrderLineProtocol] = set()
+        self._allocations: set[ports.OrderLineProtocol] = set()
 
-    def allocate(self, line: OrderLineProtocol) -> None:
+    def allocate(self, line: ports.OrderLineProtocol) -> None:
         """Allocate order line in batch."""
         if self.can_allocate(line):
             self._allocations.add(line)
 
-    def deallocate(self, line: OrderLineProtocol) -> None:
+    def deallocate(self, line: ports.OrderLineProtocol) -> None:
         """Deallocate the order line from batch."""
         try:
             self._allocations.remove(line)
@@ -90,7 +86,7 @@ class Batch:
         """Get available product quantity."""
         return self._purchased_quantity - self.allocated_quantity
 
-    def can_allocate(self, line: OrderLineProtocol) -> bool:
+    def can_allocate(self, line: ports.OrderLineProtocol) -> bool:
         """Check that product can be allocated."""
         return self.sku == line.sku and self.available_quantity >= line.qty
 
@@ -102,7 +98,7 @@ class Batch:
     def __hash__(self) -> int:
         return hash(self.ref)
 
-    def __gt__(self, other: BatchProtocol) -> bool:
+    def __gt__(self, other: ports.BatchProtocol) -> bool:
         if self.eta is None:
             return False
         if other.eta is None:
@@ -116,16 +112,16 @@ class Product:
     def __init__(
         self,
         sku: str,
-        batches: list[BatchProtocol],
+        batches: list[ports.BatchProtocol],
         version_number: int = 0,
     ) -> None:
         """Construct the model."""
         self._sku = sku
         self._batches = batches
         self._version_number = version_number
-        self._events: list[EventProtocol] = []
+        self._events: list[ports.EventProtocol] = []
 
-    def allocate(self, line: OrderLineProtocol) -> str | None:
+    def allocate(self, line: ports.OrderLineProtocol) -> str | None:
         """Allocate."""
         try:
             batch = next(
@@ -139,17 +135,19 @@ class Product:
             return None
 
     @property
-    def events(self) -> list[EventProtocol]:
+    def events(self) -> list[ports.EventProtocol]:
         """Get events."""
         return self._events
 
     @property
-    def batches(self) -> list[BatchProtocol]:
+    def batches(self) -> list[ports.BatchProtocol]:
         """Get batches."""
         return self._batches
 
 
-def allocate(line: OrderLineProtocol, batches: list[BatchProtocol]) -> str:
+def allocate(
+    line: ports.OrderLineProtocol, batches: list[ports.BatchProtocol]
+) -> str:
     """Allocate the order line to faster batch."""
     try:
         batch = next(b for b in sorted(batches) if b.can_allocate(line))
