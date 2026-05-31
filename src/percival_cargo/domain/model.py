@@ -144,6 +144,11 @@ class Product:
         """Get events."""
         return self._events
 
+    @property
+    def batches(self) -> list[BatchProtocol]:
+        """Get batches."""
+        return self._batches
+
 
 def allocate(line: OrderLineProtocol, batches: list[BatchProtocol]) -> str:
     """Allocate the order line to faster batch."""
