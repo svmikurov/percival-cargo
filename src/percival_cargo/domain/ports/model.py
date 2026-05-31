@@ -36,6 +36,7 @@ class BatchProtocol(
 
 class ProductProtocol(
     components.HasEvents[EventProtocol],
+    components.HasBatches[BatchProtocol],
     components.Allocatable[OrderLineProtocol],
     Protocol,
 ):
