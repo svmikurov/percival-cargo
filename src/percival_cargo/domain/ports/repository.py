@@ -5,17 +5,17 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Protocol
 
 if TYPE_CHECKING:
-    from .model import BatchProtocol
+    from .model import ProductProtocol
 
 
-class BatchRepositoryProtocol(Protocol):
+class RepositoryProtocol(Protocol):
     """Protocol for batch repository interface."""
 
-    def add(self, batch: BatchProtocol) -> None:
-        """Add batch."""
+    def add(self, product: ProductProtocol) -> None:
+        """Add product."""
 
-    def get(self, reference: str) -> BatchProtocol:
+    def get(self, sku: str) -> ProductProtocol:
         """Get batch."""
 
-    def list(self) -> list[BatchProtocol]:
+    def list(self) -> list[ProductProtocol]:
         """Get batches."""

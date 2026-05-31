@@ -7,27 +7,27 @@ from typing import TYPE_CHECKING, override
 from .abstract import AbstractBatchRepository
 
 if TYPE_CHECKING:
-    from percival_cargo.domain.ports.model import BatchProtocol
+    from percival_cargo.domain.ports.model import ProductProtocol
 
 
 class FakeRepository(AbstractBatchRepository):
     """Fake repository."""
 
-    def __init__(self, batches: list[BatchProtocol]) -> None:
+    def __init__(self, batches: list[ProductProtocol]) -> None:
         """Construct the repository."""
         self._batches = set(batches)
 
     @override
-    def add(self, batch: BatchProtocol) -> None:
+    def add(self, product: ProductProtocol) -> None:
         """Add batch."""
-        self._batches.add(batch)
+        raise NotImplementedError
 
     @override
-    def get(self, reference: str) -> BatchProtocol:
+    def get(self, sku: str) -> ProductProtocol:
         """Get batch."""
-        return next(b for b in self._batches if b.reference == reference)
+        raise NotImplementedError
 
     @override
-    def list(self) -> list[BatchProtocol]:
+    def list(self) -> list[ProductProtocol]:
         """Get all batches."""
-        return list(self._batches)
+        raise NotImplementedError

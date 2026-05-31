@@ -5,7 +5,7 @@ from percival_cargo.domain.ports.model import (
     BatchProtocol,
     OrderLineProtocol,
 )
-from percival_cargo.domain.ports.repository import BatchRepositoryProtocol
+from percival_cargo.domain.ports.repository import RepositoryProtocol
 
 from .exceptions import InvalidSku
 
@@ -17,7 +17,7 @@ def is_valid_sku(sku: str, batches: list[BatchProtocol]) -> bool:
 
 def allocate(  # type: ignore
     line: OrderLineProtocol,
-    repo: BatchRepositoryProtocol,
+    repo: RepositoryProtocol,
     session,
 ) -> str:
     """Allocate."""

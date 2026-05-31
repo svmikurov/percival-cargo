@@ -4,14 +4,12 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, override
 
-from percival_cargo.domain.model import Batch
-
 from .abstract import AbstractBatchRepository
 
 if TYPE_CHECKING:
     from sqlalchemy.orm.session import Session
 
-    from percival_cargo.domain.ports.model import BatchProtocol
+    from percival_cargo.domain.ports.model import ProductProtocol
 
 
 class SqlAlchemyBatchRepository(AbstractBatchRepository):
@@ -22,16 +20,16 @@ class SqlAlchemyBatchRepository(AbstractBatchRepository):
         self._session = session
 
     @override
-    def add(self, batch: BatchProtocol) -> None:
+    def add(self, product: ProductProtocol) -> None:
         """Add batch."""
-        self._session.add(batch)
+        raise NotImplementedError
 
     @override
-    def get(self, reference: str) -> BatchProtocol:
+    def get(self, sku: str) -> ProductProtocol:
         """Get batch."""
-        return self._session.query(Batch).filter_by(reference=reference).one()
+        raise NotImplementedError
 
     @override
-    def list(self) -> list[BatchProtocol]:
+    def list(self) -> list[ProductProtocol]:
         """Get batches."""
-        return list(self._session.query(Batch).all())
+        raise NotImplementedError

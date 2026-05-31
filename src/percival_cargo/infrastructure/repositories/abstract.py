@@ -5,26 +5,26 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, override
 
-from percival_cargo.domain.ports.repository import BatchRepositoryProtocol
+from percival_cargo.domain.ports.repository import RepositoryProtocol
 
 if TYPE_CHECKING:
-    from percival_cargo.domain.ports.model import BatchProtocol
+    from percival_cargo.domain.ports.model import ProductProtocol
 
 
-class AbstractBatchRepository(ABC, BatchRepositoryProtocol):
+class AbstractBatchRepository(ABC, RepositoryProtocol):
     """ABC for batch repository."""
 
     @override
     @abstractmethod
-    def add(self, batch: BatchProtocol) -> None:
+    def add(self, product: ProductProtocol) -> None:
         """Add batch."""
 
     @override
     @abstractmethod
-    def get(self, reference: str) -> BatchProtocol:
+    def get(self, sku: str) -> ProductProtocol:
         """Get batch."""
 
     @override
     @abstractmethod
-    def list(self) -> list[BatchProtocol]:
+    def list(self) -> list[ProductProtocol]:
         """Get batches."""
