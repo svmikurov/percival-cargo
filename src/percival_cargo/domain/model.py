@@ -5,12 +5,17 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
+from . import events
 from .exceptions import OutOfBatchException, OutOfStockException
 
 if TYPE_CHECKING:
     from datetime import date
 
-    from .interfaces.model import BatchProtocol, OrderLineProtocol
+    from .interfaces.model import (
+        BatchProtocol,
+        EventProtocol,
+        OrderLineProtocol,
+    )
 
 
 @dataclass(frozen=True)
@@ -97,7 +102,7 @@ class Batch:
     def __hash__(self) -> int:
         return hash(self.reference)
 
-    def __gt__(self, other: Batch) -> bool:
+    def __gt__(self, other: BatchProtocol) -> bool:
         if self.eta is None:
             return False
         if other.eta is None:
@@ -105,11 +110,48 @@ class Batch:
         return self.eta > other.eta
 
 
+class Product:
+    """Product."""
+
+    def __init__(
+        self,
+        sku: str,
+        batches: list[BatchProtocol],
+        version_number: int = 0,
+    ) -> None:
+        """Construct the model."""
+        self._sku = sku
+        self._batches = batches
+        self._version_number = version_number
+        self._events: list[EventProtocol] = []
+
+    def allocate(self, line: OrderLineProtocol) -> str | None:
+        """Allocate."""
+        try:
+            batch = next(
+                b for b in sorted(self._batches) if b.can_allocate(line)
+            )
+        except StopIteration:
+            self._events.append(events.OutOfStock(line.sku))
+            return None
+
+        batch.allocate(line)
+        self._version_number += 1
+        return batch.reference
+
+    @property
+    def events(self) -> list[EventProtocol]:
+        """Get events."""
+        return self._events
+
+
 def allocate(line: OrderLineProtocol, batches: list[BatchProtocol]) -> str:
     """Allocate the order line to faster batch."""
     try:
-        batch = next(b for b in sorted(batches) if b.can_allocate(line))  # type: ignore
+        batch = next(b for b in sorted(batches) if b.can_allocate(line))
     except StopIteration as err:
-        raise OutOfStockException(f'The item {line.sku} is out of stock') from err
+        raise OutOfStockException(
+            f'The item {line.sku} is out of stock'
+        ) from err
     batch.allocate(line)
     return batch.reference
