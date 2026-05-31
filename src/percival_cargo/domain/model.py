@@ -129,15 +129,14 @@ class Product:
         """Allocate."""
         try:
             batch = next(
-                b for b in sorted(self._batches) if b.can_allocate(line)
+                b for b in sorted(self.batches) if b.can_allocate(line)
             )
+            batch.allocate(line)
+            self._version_number += 1
+            return batch.ref
         except StopIteration:
-            self._events.append(events.OutOfStock(line.sku))
+            self.events.append(events.OutOfStock(line.sku))
             return None
-
-        batch.allocate(line)
-        self._version_number += 1
-        return batch.ref
 
     @property
     def events(self) -> list[EventProtocol]:
