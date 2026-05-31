@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
-from typing import Protocol
+from typing import TYPE_CHECKING, Protocol
+
+if TYPE_CHECKING:
+    from datetime import date
+
 
 ###################################################
 # Components
@@ -29,9 +33,19 @@ class HasQuantity(Protocol):
     def qty(self) -> int: ...
 
 
+class HasETA(Protocol):
+    @property
+    def eta(self) -> date | None: ...
+
+
 class HasAvailableQuantity(Protocol):
     @property
     def available_quantity(self) -> int: ...
+
+
+class HasEvents(Protocol):
+    @property
+    def events(self) -> list[EventProtocol]: ...
 
 
 class Allocatable(Protocol):
@@ -63,6 +77,7 @@ class OrderLineProtocol(
 class BatchProtocol(
     HasReference,
     HasSKU,
+    HasETA,
     Allocatable,
     CanAllocate,
     DeAllocatable,
@@ -71,9 +86,17 @@ class BatchProtocol(
 ):
     """Protocol for batch interface."""
 
+    def __gt__(self, other: BatchProtocol) -> bool: ...
+    def __eq__(self, other: object) -> bool: ...
+
 
 class ProductProtocol(
+    HasEvents,
     Allocatable,
     Protocol,
 ):
     """Protocol for product interface."""
+
+
+class EventProtocol(Protocol):
+    """Protocol for event interface."""
