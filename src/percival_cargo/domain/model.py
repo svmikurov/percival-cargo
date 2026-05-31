@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from .exceptions import OutOfBatch, OutOfStock
+from .exceptions import OutOfBatchException, OutOfStockException
 
 if TYPE_CHECKING:
     from datetime import date
@@ -73,7 +73,7 @@ class Batch:
         try:
             self._allocations.remove(line)
         except KeyError as err:
-            raise OutOfBatch from err
+            raise OutOfBatchException from err
 
     @property
     def allocated_quantity(self) -> int:
@@ -110,6 +110,6 @@ def allocate(line: OrderLineProtocol, batches: list[BatchProtocol]) -> str:
     try:
         batch = next(b for b in sorted(batches) if b.can_allocate(line))  # type: ignore
     except StopIteration as err:
-        raise OutOfStock(f'The item {line.sku} is out of stock') from err
+        raise OutOfStockException(f'The item {line.sku} is out of stock') from err
     batch.allocate(line)
     return batch.reference

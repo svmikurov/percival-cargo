@@ -4,7 +4,7 @@ from datetime import date, timedelta
 
 import pytest
 
-from percival_cargo.domain.exceptions import OutOfStock
+from percival_cargo.domain.exceptions import OutOfStockException
 from percival_cargo.domain.model import Batch, OrderLine, allocate
 
 today = date.today()
@@ -56,10 +56,12 @@ def test_returns_allocated_batch_ref() -> None:
 
 
 def test_raises_out_of_stock_exception_if_cannot_allocate() -> None:
+    # Arrange
     batch = Batch('batch1', 'SMALL-FORK', 10, eta=today)
     line1 = OrderLine('order1', 'SMALL-FORK', 10)
     line2 = OrderLine('order2', 'SMALL-FORK', 1)
     allocate(line1, [batch])
 
-    with pytest.raises(OutOfStock, match='SMALL-FORK'):
+    # Act & Assert
+    with pytest.raises(OutOfStockException, match='SMALL-FORK'):
         allocate(line2, [batch])
