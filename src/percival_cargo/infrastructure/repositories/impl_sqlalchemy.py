@@ -9,7 +9,7 @@ from .abstract import AbstractBatchRepository
 if TYPE_CHECKING:
     from sqlalchemy.orm.session import Session
 
-    from percival_cargo.domain.ports.model import ProductProtocol
+    from percival_cargo.ports.model import ProductProtocol
 
 
 class SqlAlchemyBatchRepository(AbstractBatchRepository):

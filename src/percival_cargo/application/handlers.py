@@ -7,9 +7,10 @@ from typing import TYPE_CHECKING
 from percival_cargo.domain import model
 from percival_cargo.domain.exceptions import InvalidSkuException
 from percival_cargo.infrastructure import email
+from percival_cargo.ports import events
 
 if TYPE_CHECKING:
-    from percival_cargo.domain.ports import events, uow
+    from percival_cargo.ports import uow
 
 
 def add_batch(

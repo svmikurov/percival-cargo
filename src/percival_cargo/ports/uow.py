@@ -4,8 +4,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Protocol, Self
 
+from . import repository
+
 if TYPE_CHECKING:
-    from . import components, repository
+    from . import components
 
 
 class UnitOfWorkProtocol(

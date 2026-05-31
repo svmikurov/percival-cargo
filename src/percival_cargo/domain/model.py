@@ -11,7 +11,7 @@ from .exceptions import OutOfBatchException, OutOfStockException
 if TYPE_CHECKING:
     from datetime import date
 
-    from .ports.model import (
+    from percival_cargo.ports.model import (
         BatchProtocol,
         EventProtocol,
         OrderLineProtocol,

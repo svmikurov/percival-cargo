@@ -5,10 +5,10 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, override
 
-from percival_cargo.domain.ports.repository import RepositoryProtocol
+from percival_cargo.ports.repository import RepositoryProtocol
 
 if TYPE_CHECKING:
-    from percival_cargo.domain.ports.model import ProductProtocol
+    from percival_cargo.ports.model import ProductProtocol
 
 
 class AbstractBatchRepository(ABC, RepositoryProtocol):
