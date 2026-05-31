@@ -70,16 +70,27 @@ class HasProducts(Protocol[Repository_cov]):
 ###################################################
 
 
+# REVIEW: Update option reference allocate result
+
+
 class Allocatable(Protocol[OrderLine_contra]):
+    def allocate(self, line: OrderLine_contra) -> None: ...
+
+
+class CanAllocate(Protocol[OrderLine_contra]):
+    def allocate(self, line: OrderLine_contra) -> str: ...
+
+
+class OptionAllocatable(Protocol[OrderLine_contra]):
     def allocate(self, line: OrderLine_contra) -> str | None: ...
+
+
+class IsCanAllocate(Protocol[OrderLine_contra]):
+    def can_allocate(self, line: OrderLine_contra) -> bool: ...
 
 
 class DeAllocatable(Protocol[OrderLine_contra]):
     def deallocate(self, line: OrderLine_contra) -> None: ...
-
-
-class CanAllocate(Protocol[OrderLine_contra]):
-    def can_allocate(self, line: OrderLine_contra) -> bool: ...
 
 
 class CanCommit(Protocol):

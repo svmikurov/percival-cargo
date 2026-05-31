@@ -23,7 +23,7 @@ class BatchProtocol(
     components.HasSKU,
     components.HasETA,
     components.Allocatable[OrderLineProtocol],
-    components.CanAllocate[OrderLineProtocol],
+    components.IsCanAllocate[OrderLineProtocol],
     components.DeAllocatable[OrderLineProtocol],
     components.HasAvailableQuantity,
     Protocol,
@@ -37,7 +37,7 @@ class BatchProtocol(
 class ProductProtocol(
     components.HasEvents[EventProtocol],
     components.HasBatches[BatchProtocol],
-    components.Allocatable[OrderLineProtocol],
+    components.OptionAllocatable[OrderLineProtocol],
     Protocol,
 ):
     """Protocol for product interface."""
