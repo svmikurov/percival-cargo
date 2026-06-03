@@ -1,33 +1,12 @@
-"""Domain model."""
-
-from __future__ import annotations
+"""Domain models."""
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING
-
-from . import events
-from .exceptions import OutOfBatchException, OutOfStockException
-
-if TYPE_CHECKING:
-    from datetime import date
-
-    from percival_cargo import ports
+from datetime import date
 
 
 @dataclass(frozen=True)
 class OrderLine:
-    """Product order line.
-
-    Parameters
-    ----------
-    order_id : str
-        Order identifier.
-    sku : `str`
-        Stock-keeping unit of product.
-    qty : `int`
-        Product quantity in order.
-
-    """
+    """Item order line."""
 
     order_id: str
     sku: str
@@ -35,20 +14,7 @@ class OrderLine:
 
 
 class Batch:
-    """Product batch.
-
-    Parameters
-    ----------
-    ref : `str`
-        Order reference.
-    sku : `str`
-        Stock-keeping unit of product.
-    qty : `int`
-        Product quantity.
-    eta : date | None
-        Estimated arrival time
-
-    """
+    """Batch."""
 
     def __init__(
         self,
@@ -57,103 +23,51 @@ class Batch:
         qty: int,
         eta: date | None,
     ) -> None:
-        """Construct the model."""
-        self.ref = ref
-        self.sku = sku
-        self.eta = eta
+        """Construct the batch."""
+        self.reference = ref
+        self._sku = sku
+        self._eta = eta
         self._purchased_quantity = qty
-        self._allocations: set[ports.OrderLineProtocol] = set()
+        self._allocations: set[OrderLine] = set()
 
-    def allocate(self, line: ports.OrderLineProtocol) -> None:
-        """Allocate order line in batch."""
+    def allocate(self, line: OrderLine) -> None:
+        """Allocate the line order to batch."""
         if self.can_allocate(line):
             self._allocations.add(line)
 
-    def deallocate(self, line: ports.OrderLineProtocol) -> None:
-        """Deallocate the order line from batch."""
-        try:
+    def deallocate(self, line: OrderLine) -> None:
+        """Deallocate the line order from batch."""
+        if line in self._allocations:
             self._allocations.remove(line)
-        except KeyError as err:
-            raise OutOfBatchException from err
 
     @property
     def allocated_quantity(self) -> int:
-        """Get allocated product quantity."""
+        """Get allocated quantity."""
         return sum(line.qty for line in self._allocations)
 
     @property
     def available_quantity(self) -> int:
-        """Get available product quantity."""
+        """Get available quantity."""
         return self._purchased_quantity - self.allocated_quantity
 
-    def can_allocate(self, line: ports.OrderLineProtocol) -> bool:
-        """Check that product can be allocated."""
-        return self.sku == line.sku and self.available_quantity >= line.qty
+    def can_allocate(self, line: OrderLine) -> bool:
+        """Check that batch can allocate the line order."""
+        return self._sku == line.sku and self.available_quantity >= line.qty
 
     def __eq__(self, other: object) -> bool:
+        """Check is equal."""
         if not isinstance(other, Batch):
             return False
-        return self.ref == other.ref
+        return self.reference == other.reference
 
     def __hash__(self) -> int:
-        return hash(self.ref)
+        """Hash the batch."""
+        return hash(self.reference)
 
-    def __gt__(self, other: ports.BatchProtocol) -> bool:
-        if self.eta is None:
+    def __gt__(self, other: 'Batch') -> bool:
+        """Check is greeter instance that other."""
+        if self._eta is None:
             return False
-        if other.eta is None:
+        if other._eta is None:
             return True
-        return self.eta > other.eta
-
-
-class Product:
-    """Product."""
-
-    def __init__(
-        self,
-        sku: str,
-        batches: list[ports.BatchProtocol],
-        version_number: int = 0,
-    ) -> None:
-        """Construct the model."""
-        self._sku = sku
-        self._batches = batches
-        self._version_number = version_number
-        self._events: list[ports.EventProtocol] = []
-
-    def allocate(self, line: ports.OrderLineProtocol) -> str | None:
-        """Allocate."""
-        try:
-            batch = next(
-                b for b in sorted(self.batches) if b.can_allocate(line)
-            )
-            batch.allocate(line)
-            self._version_number += 1
-            return batch.ref
-        except StopIteration:
-            self.events.append(events.OutOfStock(line.sku))
-            return None
-
-    @property
-    def events(self) -> list[ports.EventProtocol]:
-        """Get events."""
-        return self._events
-
-    @property
-    def batches(self) -> list[ports.BatchProtocol]:
-        """Get batches."""
-        return self._batches
-
-
-def allocate(
-    line: ports.OrderLineProtocol, batches: list[ports.BatchProtocol]
-) -> str:
-    """Allocate the order line to faster batch."""
-    try:
-        batch = next(b for b in sorted(batches) if b.can_allocate(line))
-    except StopIteration as err:
-        raise OutOfStockException(
-            f'The item {line.sku} is out of stock'
-        ) from err
-    batch.allocate(line)
-    return batch.ref
+        return self._eta > other._eta

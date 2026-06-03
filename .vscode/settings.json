@@ -73,6 +73,7 @@
     "Messagebus",
     // Project variables
     "orderline",
+    "skus",
     // Library dependencies
     "sqlachemy",
     "autouse",
