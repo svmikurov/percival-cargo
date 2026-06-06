@@ -132,6 +132,9 @@ def restart_api() -> None:
         подобранное значение, работающее на CI (GitHub Actions, Jenkins).
 
     """
-    (Path(__file__).parent / 'flask_app.py').touch()
+    (
+        Path(__file__).parent.parent.parent
+        / 'src/percival_cargo/entrypoints/flask_app.py'
+    ).touch()
     time.sleep(0.5)
     wait_for_webapp_to_come_up()

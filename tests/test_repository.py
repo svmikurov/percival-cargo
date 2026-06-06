@@ -7,8 +7,8 @@ from typing import TYPE_CHECKING
 import pytest
 from sqlalchemy import text
 
+from percival_cargo.adapters import repository
 from percival_cargo.domain import model
-from percival_cargo.infrastructure import repository
 
 if TYPE_CHECKING:
     from sqlalchemy.orm import Session

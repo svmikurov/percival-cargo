@@ -81,6 +81,8 @@
     "sqlalchemy",
     "autouse",
     "usefixtures",
+    "jsonify",
+    "sessionmaker",
     // Sphinx directives
     "toctree",
   ]

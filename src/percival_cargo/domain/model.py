@@ -13,6 +13,12 @@ if TYPE_CHECKING:
     )
 
 
+class OutOfStock(Exception):
+    """Raises then no product in stock."""
+
+    pass
+
+
 @dataclass(unsafe_hash=True)
 class OrderLine:
     """Item order line."""

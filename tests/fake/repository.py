@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from percival_cargo.adapters.abstract import AbstractRepository
 from percival_cargo.domain import model as model
-from percival_cargo.infrastructure.abstract import AbstractRepository
 
 if TYPE_CHECKING:
     from percival_cargo.domain.protocols import BatchProtocol
