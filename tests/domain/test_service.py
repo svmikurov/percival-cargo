@@ -60,4 +60,4 @@ def test_returns_allocated_batch_ref(
     allocation = services.allocate(line, [in_stock_batch, shipment_batch])
 
     # Assert
-    assert allocation == in_stock_batch.reference
+    assert allocation == in_stock_batch._reference

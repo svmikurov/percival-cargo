@@ -78,7 +78,7 @@
     "orderline",
     "skus",
     // Library dependencies
-    "sqlachemy",
+    "sqlalchemy",
     "autouse",
     "usefixtures",
     // Sphinx directives

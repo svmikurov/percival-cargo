@@ -167,8 +167,9 @@ def start_mappers() -> None:
     # using the allocations association table.
     mapper_registry.map_imperatively(
         model.Batch,
-        batches,  # ✅ Исправлено: используем правильную таблицу
+        batches,
         properties={
+            '_reference': batches.c.reference,
             '_sku': batches.c.sku,
             '_eta': batches.c.eta,
             # Relationship

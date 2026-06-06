@@ -33,7 +33,7 @@ class Batch:
         eta: date | None,
     ) -> None:
         """Construct the batch."""
-        self.reference = ref
+        self._reference = ref
         self._sku = sku
         self._eta = eta
         self._purchased_quantity = qty
@@ -48,6 +48,16 @@ class Batch:
         """Deallocate the line order from batch."""
         if line in self._allocations:
             self._allocations.remove(line)
+
+    @property
+    def reference(self) -> str:
+        """Get SKU."""
+        return self._reference
+
+    @property
+    def sku(self) -> str:
+        """Get SKU."""
+        return self._sku
 
     @property
     def allocated_quantity(self) -> int:
