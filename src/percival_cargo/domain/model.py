@@ -1,7 +1,16 @@
 """Domain models."""
 
+from __future__ import annotations
+
 from dataclasses import dataclass
 from datetime import date
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from percival_cargo.domain.protocols import (
+        BatchProtocol,
+        OrderLineProtocol,
+    )
 
 
 @dataclass(unsafe_hash=True)
@@ -28,14 +37,14 @@ class Batch:
         self._sku = sku
         self._eta = eta
         self._purchased_quantity = qty
-        self._allocations: set[OrderLine] = set()
+        self._allocations: set[OrderLineProtocol] = set()
 
-    def allocate(self, line: OrderLine) -> None:
+    def allocate(self, line: OrderLineProtocol) -> None:
         """Allocate the line order to batch."""
         if self.can_allocate(line):
             self._allocations.add(line)
 
-    def deallocate(self, line: OrderLine) -> None:
+    def deallocate(self, line: OrderLineProtocol) -> None:
         """Deallocate the line order from batch."""
         if line in self._allocations:
             self._allocations.remove(line)
@@ -50,7 +59,7 @@ class Batch:
         """Get available quantity."""
         return self._purchased_quantity - self.allocated_quantity
 
-    def can_allocate(self, line: OrderLine) -> bool:
+    def can_allocate(self, line: OrderLineProtocol) -> bool:
         """Check that batch can allocate the line order."""
         return self._sku == line.sku and self.available_quantity >= line.qty
 
@@ -64,7 +73,7 @@ class Batch:
         """Hash the batch."""
         return hash(self.reference)
 
-    def __gt__(self, other: 'Batch') -> bool:
+    def __gt__(self, other: BatchProtocol) -> bool:
         """Check is greeter instance that other."""
         if self._eta is None:
             return False
