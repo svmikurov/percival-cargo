@@ -72,12 +72,15 @@
     // Documentation
     "Messagebus",
     "мапперы",
+    "Персиваля",
+    "Фикстура",
     // Project variables
     "orderline",
     "skus",
     // Library dependencies
     "sqlachemy",
     "autouse",
+    "usefixtures",
     // Sphinx directives
     "toctree",
   ]
