@@ -24,6 +24,7 @@ def random_orderid(name: str = '') -> str:
     return f'order-{name}-{random_suffix()}'
 
 
+@pytest.mark.e2e
 @pytest.mark.usefixtures('restart_api')
 def test_api_returns_allocation(add_stock) -> None:  # type: ignore
     sku, other_sku = random_sku(), random_sku('other')

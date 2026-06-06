@@ -11,5 +11,7 @@ Reade the documentation
 make docs-open
 ```
 
-## Test
-Run flask, run tests
+## All tests
+```bash
+make prepare-test
+```

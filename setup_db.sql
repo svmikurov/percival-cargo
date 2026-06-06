@@ -1,34 +1,38 @@
--- Скрипт настройки базы данных для percival-cargo
+-- Скрипт ПЕРЕСОЗДАНИЯ базы данных для percival-cargo
+-- ВНИМАНИЕ! Удаляет существующую базу данных!
 
--- 1. Создание пользователя (если не существует)
-DO $$
-BEGIN
-   IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'allocation') THEN
-      CREATE USER allocation WITH PASSWORD 'allocation123';
-   END IF;
-END
-$$;
+-- 1. Завершить все соединения с базой allocation
+SELECT pg_terminate_backend(pid) 
+FROM pg_stat_activity 
+WHERE datname = 'allocation';
 
--- 2. Создание базы данных (если не существует)
-SELECT 'CREATE DATABASE allocation_db OWNER allocation'
-WHERE NOT EXISTS (SELECT 1 FROM pg_database WHERE datname = 'allocation_db')\gexec
+-- 2. Удалить базу данных
+DROP DATABASE IF EXISTS allocation;
 
--- 3. Подключение к новой базе данных
-\c allocation_db
+-- 3. Удалить пользователя
+DROP USER IF EXISTS allocation;
 
--- 4. Настройка прав на схему public
+-- 4. Создать пользователя
+CREATE USER allocation WITH PASSWORD 'abc123';
+
+-- 5. Создать базу данных
+CREATE DATABASE allocation OWNER allocation;
+
+-- 6. Подключиться к новой базе
+\c allocation
+
+-- 7. Настройка прав
 ALTER SCHEMA public OWNER TO allocation;
 GRANT ALL ON SCHEMA public TO allocation;
 GRANT CREATE ON SCHEMA public TO allocation;
 GRANT USAGE ON SCHEMA public TO allocation;
 
--- 5. Настройка прав по умолчанию
+-- 8. Права по умолчанию
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO allocation;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO allocation;
 
--- 6. Создание таблиц (если нужно вручную)
--- Таблица batches
-CREATE TABLE IF NOT EXISTS batches (
+-- 9. Создание таблиц
+CREATE TABLE batches (
     id SERIAL PRIMARY KEY,
     reference VARCHAR(255) NOT NULL,
     sku VARCHAR(255) NOT NULL,
@@ -36,13 +40,12 @@ CREATE TABLE IF NOT EXISTS batches (
     eta DATE
 );
 
--- Таблица order_lines (если нужна)
-CREATE TABLE IF NOT EXISTS order_lines (
+CREATE TABLE order_lines (
     id SERIAL PRIMARY KEY,
     order_id VARCHAR(255),
     sku VARCHAR(255),
     qty INTEGER NOT NULL
 );
 
--- Вывод информации
+-- 10. Вывод информации
 \dt
