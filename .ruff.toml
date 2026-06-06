@@ -28,6 +28,7 @@ ignore = [
     "D416",     # Section name should end with a colon
     "N818",     # Exception name should be named with an Error suffix
     # Temporary
+    "D107",     # Missing docstring in `__init__`
     "E501",     # Line too long
     "W505",     # Doc line too long
 ]
