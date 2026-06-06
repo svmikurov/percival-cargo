@@ -71,6 +71,7 @@
     "pytest",
     // Documentation
     "Messagebus",
+    "мапперы",
     // Project variables
     "orderline",
     "skus",

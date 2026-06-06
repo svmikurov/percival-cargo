@@ -30,7 +30,7 @@ ignore = [
 ]
 
 [lint.per-file-ignores]
-"tests/*" = ["D101", "D102", "D103"]
+"tests/*" = ["D101", "D102", "D103", "E501", "W505"]
 "*/ports/*" = ["D101", "D102", "D103"]
 "*/protocols/*" = ["D101", "D102", "D103"]
 
