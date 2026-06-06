@@ -10,3 +10,6 @@ Reade the documentation
 ```bash
 make docs-open
 ```
+
+## Test
+Run flask, run tests

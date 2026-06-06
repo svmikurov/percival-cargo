@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Sequence
+from typing import TYPE_CHECKING
 
 from percival_cargo.domain import model
 
@@ -33,6 +33,6 @@ class SqlAlchemyRepository(AbstractRepository):
             .one()
         )
 
-    def list(self) -> Sequence[BatchProtocol]:
+    def list(self) -> list[BatchProtocol]:
         """Get all batches."""
-        return self._session.query(model.Batch).all()
+        return self._session.query(model.Batch).all()  # type: ignore

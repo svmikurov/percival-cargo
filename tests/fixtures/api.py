@@ -8,7 +8,7 @@ import pytest
 import requests
 from requests import Response
 
-import config
+import percival_cargo.config as config
 
 
 def wait_for_webapp_to_come_up() -> Optional[Response]:

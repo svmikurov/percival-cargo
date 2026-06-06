@@ -42,6 +42,10 @@ docs-build:
 docs-open: docs-build
 	xdg-open docs/build/html/index.html
 
+# Run flask server
+run-flask:
+	@poetry run flask --app src/percival_cargo/entryponts/flask_app/app.py run --port 5005
+
 # Show available commands
 help:
 	@echo "Available commands:"
@@ -56,3 +60,5 @@ help:
 	@echo "  make clean        - Remove cache files"
 	@echo "  make docs-build   - Build HTML documentation"
 	@echo "  make docs-open    - Build docs and open in browser"
+	@echo "  ----- Flask -----"
+	@echo "  make run-flask    - ..."
