@@ -35,4 +35,4 @@ class SqlAlchemyRepository(AbstractRepository):
 
     def list(self) -> list[BatchProtocol]:
         """Get all batches."""
-        return self._session.query(model.Batch).all()  # type: ignore
+        return list(self._session.query(model.Batch).all())

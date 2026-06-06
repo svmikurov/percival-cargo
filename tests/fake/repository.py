@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Sequence
+from typing import TYPE_CHECKING
 
 from percival_cargo.domain import model as model
 from percival_cargo.infrastructure.abstract import AbstractRepository
@@ -25,6 +25,6 @@ class FakeBatchRepository(AbstractRepository):
         """Get batch."""
         return next(b for b in self._batches if b.reference == reference)
 
-    def list(self) -> Sequence[BatchProtocol]:
+    def list(self) -> list[BatchProtocol]:
         """Get all batches."""
         return list(self._batches)
