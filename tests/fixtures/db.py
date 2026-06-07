@@ -54,7 +54,7 @@ def wait_for_webapp_to_come_up():  # type: ignore
 
 @pytest.fixture(scope='session')
 def postgres_db():  # type: ignore
-    engine = create_engine(config.get_postgres_uri())
+    engine = create_engine(config.get_postgres_url())
     wait_for_postgres_to_come_up(engine)  # type: ignore
     metadata.create_all(engine)
     return engine

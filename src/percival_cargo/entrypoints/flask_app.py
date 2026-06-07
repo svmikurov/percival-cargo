@@ -11,7 +11,7 @@ from percival_cargo.infrastructure import orm, repository
 
 orm.start_mappers()
 
-get_session = sessionmaker(bind=create_engine(config.get_postgres_uri()))
+get_session = sessionmaker(bind=create_engine(config.get_postgres_url()))
 app = Flask(__name__)
 
 

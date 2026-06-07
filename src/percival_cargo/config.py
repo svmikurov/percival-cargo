@@ -3,7 +3,7 @@
 import os
 
 
-def get_postgres_uri() -> str:
+def get_postgres_url() -> str:
     """Возвращает URI подключения к PostgreSQL с учетом окружения (local vs production).
 
     Из книги Персиваля: паттерн "конфигурация через переменные окружения с умолчаниями".
