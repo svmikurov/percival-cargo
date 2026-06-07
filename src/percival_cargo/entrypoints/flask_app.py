@@ -5,9 +5,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from percival_cargo import config
-from percival_cargo.adapters import orm, repository
 from percival_cargo.application import services
 from percival_cargo.domain import model
+from percival_cargo.infrastructure import orm, repository
 
 orm.start_mappers()
 

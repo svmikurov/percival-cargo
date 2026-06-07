@@ -11,7 +11,7 @@ from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import Session, clear_mappers, sessionmaker
 
 from percival_cargo import config
-from percival_cargo.adapters.orm import metadata, start_mappers
+from percival_cargo.infrastructure.orm import metadata, start_mappers
 
 
 @pytest.fixture
