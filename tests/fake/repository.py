@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from percival_cargo.application.abstract import AbstractBatchUoW
 from percival_cargo.domain import model as model
 from percival_cargo.infrastructure.abstract import AbstractRepository
 
@@ -28,3 +29,17 @@ class FakeBatchRepository(AbstractRepository):
     def list(self) -> list[BatchProtocol]:
         """Get all batches."""
         return list(self._batches)
+
+
+class FakeBatchUoW(AbstractBatchUoW):
+    """Fake Batch UoW."""
+
+    def __init__(self) -> None:
+        self._repo = FakeBatchRepository(set())
+        self._committed = False
+
+    def commit(self) -> None:
+        self.committed = True
+
+    def _rollback(self) -> None:
+        pass

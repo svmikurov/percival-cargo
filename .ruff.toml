@@ -38,6 +38,7 @@ ignore = [
 "*/ports/*" = ["D101", "D102", "D103"]
 "*/protocols/*" = ["D101", "D102", "D103"]
 "*/protocols.py" = ["D101", "D102", "D103"]
+"*/abstract.py" = ["D101", "D102", "D103"]
 
 [lint.flake8-quotes]
 inline-quotes = "single"
